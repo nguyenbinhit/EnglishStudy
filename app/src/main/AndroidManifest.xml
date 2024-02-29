@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.englishstudy">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EnglishStudy"
+        tools:targetApi="31">
+
+        <activity android:name=".activity.taikhoan.RankingActivity" />
+        <activity android:name=".activity.dienkhuyet.FinishDKActivity" />
+        <activity android:name=".activity.dienkhuyet.FillBlanksActivity" />
+        <activity android:name=".activity.dienkhuyet.DienKhuyetActivity" />
+        <activity android:name=".activity.taikhoan.ForgotPasswordActivity" />
+        <activity android:name=".activity.sapxepcau.FinishSXCActivity" />
+        <activity android:name=".activity.tracnghiem.FinishQuizActivity" />
+        <activity android:name=".activity.tracnghiem.QuizActivity" />
+        <activity android:name=".activity.tracnghiem.TracNghiemActivity" />
+        <activity android:name=".activity.luyennghe.FinishQuizLSActivity" />
+        <activity android:name=".activity.luyennghe.LuyenNgheActivity" />
+        <activity android:name=".activity.taikhoan.ThongTinTaikhoanActivity" />
+        <activity android:name=".activity.sapxepcau.ArrangeSentencesActivity" />
+        <activity android:name=".activity.sapxepcau.SapXepCauActivity" />
+        <activity android:name=".activity.hoctuvung.FinishHTVActivity" />
+        <activity android:name=".activity.hoctuvung.WordMattersActivity" />
+        <activity android:name=".activity.hoctuvung.DSTuVungActivity" />
+        <activity android:name=".activity.hoctuvung.HocTuVungActivity" />
+        <activity android:name=".activity.luyennghe.ListeningActivity" />
+        <activity android:name=".activity.admin.AdminActivity" />
+        <activity android:name=".activity.admin.bohoctap.AdminBoHocTapActivity" />
+        <activity android:name=".activity.admin.bohoctap.EditBoHocTapActivity" />
+        <activity android:name=".activity.admin.bohoctap.AddBoHocTapActivity" />
+        <activity android:name=".activity.admin.tuvung.AdminBoTuVungActivity" />
+        <activity android:name=".activity.admin.tuvung.AdminTuVungActivity" />
+        <activity android:name=".activity.admin.tuvung.EditTuVungActivity" />
+        <activity android:name=".activity.admin.tuvung.AddTuVungActivity" />
+        <activity android:name=".activity.admin.tracnghiem.AdminBoTracNghiemActivity" />
+        <activity android:name=".activity.admin.tracnghiem.AdminTracNghiemActivity" />
+        <activity android:name=".activity.admin.tracnghiem.AddTracNghiemActivity" />
+        <activity android:name=".activity.admin.tracnghiem.EditTracNghiemActivity" />
+        <activity android:name=".activity.admin.sapxepcau.AdminBoSapXepCauActivity" />
+        <activity android:name=".activity.admin.sapxepcau.AdminSapXepCauActivity" />
+        <activity android:name=".activity.admin.sapxepcau.EditSapXepCauActivity" />
+        <activity android:name=".activity.admin.sapxepcau.AddSapXepCauActivity" />
+        <activity android:name=".activity.admin.luyennghe.AdminBoLuyenNgheActivity" />
+        <activity android:name=".activity.admin.luyennghe.AdminLuyenNgheActivity" />
+        <activity android:name=".activity.admin.luyennghe.EditLuyenNgheActivity" />
+        <activity android:name=".activity.admin.luyennghe.AddLuyenNgheActivity" />
+        <activity android:name=".activity.admin.dienkhuyet.AdminBoDienKhuyetActivity" />
+        <activity android:name=".activity.admin.dienkhuyet.AdminDienKhuyetActivity" />
+        <activity android:name=".activity.admin.dienkhuyet.AddDienKhuyetActivity" />
+        <activity android:name=".activity.admin.dienkhuyet.EditDienKhuyetActivity" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:label="MainActivity"
+            android:theme="@style/Theme.EnglishStudy.NoActionBar" />
+
+        <activity android:name=".activity.taikhoan.SignupActivity" />
+
+        <activity
+            android:name=".activity.taikhoan.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--        <service android:name=".activity.notify.MyService"/>-->
+        <!--        <receiver android:name=".activity.notify.MyReceiver"/>-->
+    </application>
+
+</manifest>
