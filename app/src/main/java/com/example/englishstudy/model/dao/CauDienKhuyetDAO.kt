@@ -42,4 +42,12 @@ interface CauDienKhuyetDAO {
     // get cau dien khuyet by id
     @Query("SELECT * FROM cau_dien_khuyet WHERE id = :id")
     fun getCauDienKhuyetById(id: Int): LiveData<CauDienKhuyet>
+
+    // delete all cau dien khuyet
+    @Query("DELETE FROM cau_dien_khuyet")
+    fun deleteAll()
+
+    // insert list cau dien khuyet
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg cauDienKhuyets: CauDienKhuyet)
 }

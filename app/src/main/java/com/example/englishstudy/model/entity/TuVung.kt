@@ -22,7 +22,7 @@ data class TuVung(
     val audio: String,
 
     @ColumnInfo(name = "anh")
-    val anh: ByteArray
+    val anh: ByteArray?
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

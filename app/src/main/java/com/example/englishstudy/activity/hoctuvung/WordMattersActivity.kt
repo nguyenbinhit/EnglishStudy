@@ -172,7 +172,8 @@ class WordMattersActivity : AppCompatActivity() {
 
                 Toast.makeText(this, "Chính xác!!(^.^)", Toast.LENGTH_SHORT).show()
 
-                val img = BitmapFactory.decodeByteArray(DStuvung[tu].anh, 0, DStuvung[tu].anh.size)
+                val img =
+                    DStuvung[tu].anh?.let { BitmapFactory.decodeByteArray(DStuvung[tu].anh, 0, it.size) }
                 imgview.setImageBitmap(img)
                 imgview.startAnimation(smalltobig)
                 textQuestion.text = "(${DStuvung[tu].loaiTu}) - (${DStuvung[tu].dichNghia})"

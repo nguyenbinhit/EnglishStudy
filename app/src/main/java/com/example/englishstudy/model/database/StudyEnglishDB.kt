@@ -20,6 +20,7 @@ import com.example.englishstudy.model.entity.CauSapXep
 import com.example.englishstudy.model.entity.CauTracNghiem
 import com.example.englishstudy.model.entity.TuVung
 import com.example.englishstudy.model.entity.User
+import java.util.concurrent.Executors
 
 @Database(
     entities = [BoHocTap::class, CauDienKhuyet::class, CauLuyenNghe::class, CauSapXep::class, CauTracNghiem::class, User::class, TuVung::class],
@@ -48,16 +49,236 @@ abstract class StudyEnglishDB : RoomDatabase() {
 
         public fun getInstance(context: Context): StudyEnglishDB {
             if (instance == null) {
+                val callback = object : RoomDatabase.Callback() {
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        super.onCreate(db)
+
+                        Executors.newSingleThreadExecutor().execute {
+                            // User
+                            createDataUser()
+
+                            // Bo hoc tap
+                            createDataBoHocTap()
+
+                            // Cau dien khuyet
+                            createDataDienKhuyet()
+
+                            // luyen nghe
+
+                            // sap xep
+                            createDataSapXep()
+
+                            // trac nghiem
+                            createDataTracNghiem()
+
+                            // tu vung
+                            createDataTuVung()
+                        }
+                    }
+                }
+
                 instance = Room.databaseBuilder(
                     context.applicationContext,
                     StudyEnglishDB::class.java,
                     DATABASE_NAME
                 )
                     .addMigrations(MIGRATION_3_4)
+                    .addCallback(callback)
                     .build()
             }
 
             return instance!!
+        }
+
+        // create data user
+        private fun createDataUser() {
+            val userDao = instance?.userDao()
+            userDao?.deleteAll()
+            val user1 = User("admin", "admin@gmail.com", "admin", 0, 1)
+            val user2 = User("client", "client@gmail.com", "client", 0, 0)
+            userDao?.insert(user1, user2)
+        }
+
+        // create bo hoc tap
+        private fun createDataBoHocTap() {
+            val boHocTapDao = instance?.boHocTapDao()
+            boHocTapDao?.deleteAll()
+            val boHocTap1 = BoHocTap(1, "Bộ học tập số 1")
+            val boHocTap2 = BoHocTap(2, "Bộ học tập số 2")
+            val boHocTap3 = BoHocTap(3, "Bộ học tập số 3")
+            val boHocTap4 = BoHocTap(4, "Bộ học tập số 4")
+            boHocTapDao?.insert(boHocTap1, boHocTap2, boHocTap3, boHocTap4)
+        }
+
+        // create data dien khuyet
+        private fun createDataDienKhuyet() {
+            val cauDienKhuyetDao = instance?.cauDienKhuyetDao()
+            cauDienKhuyetDao?.deleteAll()
+            val cauDienKhuyet1 = CauDienKhuyet(1, "The frog can___", "jump", "eat run can jump")
+            val cauDienKhuyet2 = CauDienKhuyet(1, "The duck___swim", "can", "eat run can jump")
+            val cauDienKhuyet3 =
+                CauDienKhuyet(1, "The rabbit likes to___carrots", "eat", "eat run can jump")
+            val cauDienKhuyet4 = CauDienKhuyet(1, "My dogs___fast", "run", "eat run can jump")
+            val cauDienKhuyet5 = CauDienKhuyet(2, "Our family listen to___", "music", "music dance")
+            val cauDienKhuyet6 = CauDienKhuyet(2, "My parent like to___", "dance", "music dance")
+            val cauDienKhuyet7 = CauDienKhuyet(3, "I sit at the___", "piano", "piano guitar")
+            val cauDienKhuyet8 =
+                CauDienKhuyet(3, "My brother plays an electric___", "guitar", "piano guitar")
+            val cauDienKhuyet9 =
+                CauDienKhuyet(4, "My little brother bangs on the snare___", "drum", "drum, new")
+            val cauDienKhuyet10 = CauDienKhuyet(4, "She has a ___ dress", "new", "drum, new")
+
+            cauDienKhuyetDao?.insert(
+                cauDienKhuyet1,
+                cauDienKhuyet2,
+                cauDienKhuyet3,
+                cauDienKhuyet4,
+                cauDienKhuyet5,
+                cauDienKhuyet6,
+                cauDienKhuyet7,
+                cauDienKhuyet8,
+                cauDienKhuyet9,
+                cauDienKhuyet10
+            )
+        }
+
+        // create data luyen nghe
+
+        // create data sap xep
+        private fun createDataSapXep() {
+            val cauSapXepDao = instance?.cauSapXepDao()
+            cauSapXepDao?.deleteAll()
+            val cauSapXep1 = CauSapXep(
+                1,
+                "They are required to inform the human resources department when resigning due to a disagreement over company policy.",
+                "They are required to inform",
+                "the human resources department",
+                "when resigning due to",
+                "a disagreement over company policy."
+            )
+            val cauSapXep2 = CauSapXep(
+                1,
+                "All the important files were organized first by color and then alphabetized by the title and name.",
+                "All the important files",
+                "were organized first",
+                "by color and then alphabetized",
+                "by the title and name."
+            )
+            val cauSapXep3 =
+                CauSapXep(
+                    1,
+                    "Many companies interviewed plan to hire more personnel, while 20 percent expect to reduce their payrolls.",
+                    "Many companies interviewed",
+                    "plan to hire more personnel,",
+                    "while 20 percent expect",
+                    "to reduce their payrolls."
+                )
+            val cauSapXep4 = CauSapXep(
+                1,
+                "Employees who wish to enroll in the marketing seminar are urged to do so by this Friday.",
+                "Employees",
+                "who wish to enroll in",
+                "the marketing seminar",
+                "are urged to do so by this Friday."
+            )
+            val cauSapXep5 = CauSapXep(
+                1,
+                "The secretary in the 2nd flood office answers e-mails between 8 a.m. and noon.",
+                "The secretary",
+                "in the 2nd flood office",
+                "answers e-mails",
+                "between 8 a.m. and noon."
+            )
+
+            cauSapXepDao?.insert(
+                cauSapXep1,
+                cauSapXep2,
+                cauSapXep3,
+                cauSapXep4,
+                cauSapXep5
+            )
+        }
+
+        // create data trac nghiem
+        private fun createDataTracNghiem() {
+            val tracNghiemDAO = instance?.cauTracNghiemDao()
+            tracNghiemDAO?.deleteAll()
+
+            val tracNghiem1 = CauTracNghiem(
+                1,
+                "They are required to inform the human resources department when resigning due .......... a disagreement over company policy.",
+                "to",
+                "by",
+                "on",
+                "for",
+                "1"
+            )
+
+            val tracNghiem2 = CauTracNghiem(
+                1,
+                "All the important files were organized first by color and .......... alphabetized by the title and name.",
+                "since",
+                "here",
+                "then",
+                "much",
+                "3"
+            )
+
+            tracNghiemDAO?.insert(tracNghiem1, tracNghiem2)
+        }
+
+        // create data tu vung
+        private fun createDataTuVung() {
+            val tuVungDao = instance?.tuVungDao()
+            tuVungDao?.deleteAll()
+            val tuVung1 = TuVung(
+                1,
+                "president",
+                "Tổng thống",
+                "Danh từ",
+                "https://github.com/nguyenbinhit/Android/blob/main/TuVung_Bo01_CSDL_TuVung_Bo01_president.mp3",
+                null
+            )
+            val tuVung2 = TuVung(
+                1,
+                "customer",
+                "Khách hàng",
+                "Danh từ",
+                "https://github.com/nguyenbinhit/Android/blob/main/TuVung_Bo01_CSDL_TuVung_Bo01_customer.mp3",
+                null,
+            )
+            val tuVung3 = TuVung(
+                1,
+                "purchase",
+                "Mua",
+                "Động từ",
+                "https://github.com/nguyenbinhit/Android/blob/main/TuVung_Bo01_CSDL_TuVung_Bo01_purchase.mp3",
+                null,
+            )
+            val tuVung4 = TuVung(
+                1,
+                "item",
+                "Món hàng",
+                "Danh từ",
+                "https://github.com/nguyenbinhit/Android/blob/main/TuVung_Bo01_CSDL_TuVung_Bo01_item.mp3",
+                null,
+            )
+            val tuVung5 = TuVung(
+                1,
+                "consultant",
+                "Tư vấn viên",
+                "Danh từ",
+                "https://github.com/nguyenbinhit/Android/blob/main/TuVung_Bo01_CSDL_TuVung_Bo01_consultant.mp3",
+                null,
+            )
+
+            tuVungDao?.insert(
+                tuVung1,
+                tuVung2,
+                tuVung3,
+                tuVung4,
+                tuVung5,
+            )
         }
     }
 }

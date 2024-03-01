@@ -38,4 +38,12 @@ interface BoHocTapDAO {
     // get max stt bo hoc tap
     @Query("SELECT MAX(stt) FROM bo_hoc_tap")
     fun getMaxSTTBoHocTap(): Int
+
+    // delete all bo hoc tap
+    @Query("DELETE FROM bo_hoc_tap")
+    fun deleteAll()
+
+    // insert list bo hoc tap
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg boHocTaps: BoHocTap)
 }

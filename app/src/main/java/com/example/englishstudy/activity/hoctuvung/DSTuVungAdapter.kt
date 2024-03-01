@@ -56,7 +56,7 @@ class DSTuVungAdapter(
         val tuVung = dstuvungs[position]
         holder.twDichNghia.text = tuVung.dichNghia
         holder.twTuVung.text = "${tuVung.dapAn}(${tuVung.loaiTu}):"
-        val img = BitmapFactory.decodeByteArray(tuVung.anh, 0, tuVung.anh.size)
+        val img = tuVung.anh?.let { BitmapFactory.decodeByteArray(tuVung.anh, 0, it.size) }
         holder.imgHinh.setImageBitmap(img)
 
         return view

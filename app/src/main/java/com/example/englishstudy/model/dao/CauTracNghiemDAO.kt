@@ -34,4 +34,12 @@ interface CauTracNghiemDAO {
     // delete cau trac nghiem
     @Delete
     suspend fun deleteCauTracNghiem(cauTracNghiem: CauTracNghiem)
+
+    // delete all cau trac nghiem
+    @Query("DELETE FROM cau_trac_nghiem")
+    fun deleteAll()
+
+    // insert list cau trac nghiem
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg cauTracNghiems: CauTracNghiem)
 }

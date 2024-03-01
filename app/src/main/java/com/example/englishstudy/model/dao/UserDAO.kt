@@ -50,4 +50,12 @@ interface UserDAO {
     // get current user
     @Query("SELECT * FROM user WHERE id = :id")
     fun getCurrentUser(id: Int): LiveData<User>
+
+    // delete all user
+    @Query("DELETE FROM user")
+    fun deleteAll()
+
+    // insert list user
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg users: User)
 }

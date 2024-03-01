@@ -34,4 +34,12 @@ interface TuVungDAO {
     // delete tu vung
     @Delete
     suspend fun deleteTuVung(tuVung: TuVung)
+
+    // delete all tu vung
+    @Query("DELETE FROM tu_vung")
+    fun deleteAll()
+
+    // insert list tu vung
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg tuVungs: TuVung)
 }

@@ -38,4 +38,12 @@ interface CauSapXepDAO {
     // get cau sap xep by id
     @Query("SELECT * FROM cau_sap_xep WHERE id = :id")
     fun getCauSapXepById(id: Int): CauSapXep
+
+    // delete all cau sap xep
+    @Query("DELETE FROM cau_sap_xep")
+    fun deleteAll()
+
+    // insert list cau sap xep
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg cauSapXeps: CauSapXep)
 }

@@ -62,7 +62,7 @@ class EditTuVungActivity : AppCompatActivity() {
             "Trạng từ" -> spnTuLoai.setSelection(3)
             "Giới từ" -> spnTuLoai.setSelection(4)
         }
-        val bmp = BitmapFactory.decodeByteArray(tuVung.anh, 0, tuVung.anh.size)
+        val bmp = tuVung.anh?.let { BitmapFactory.decodeByteArray(tuVung.anh, 0, it.size) }
         imgHinh.setImageBitmap(bmp)
         imgBack.setOnClickListener {
             val intent = Intent(this, AdminTuVungActivity::class.java)
