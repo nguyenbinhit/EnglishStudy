@@ -3,6 +3,7 @@ package com.example.englishstudy.model.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import org.jetbrains.annotations.Nullable
 
 @Entity(tableName = "tu_vung")
 data class TuVung(
@@ -33,10 +34,15 @@ data class TuVung(
 
         other as TuVung
 
-        return anh.contentEquals(other.anh)
+        if (anh != null) {
+            if (other.anh == null) return false
+            if (!anh.contentEquals(other.anh)) return false
+        } else if (other.anh != null) return false
+
+        return true
     }
 
     override fun hashCode(): Int {
-        return anh.contentHashCode()
+        return anh?.contentHashCode() ?: 0
     }
 }

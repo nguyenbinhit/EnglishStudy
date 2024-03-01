@@ -24,7 +24,7 @@ import java.util.concurrent.Executors
 
 @Database(
     entities = [BoHocTap::class, CauDienKhuyet::class, CauLuyenNghe::class, CauSapXep::class, CauTracNghiem::class, User::class, TuVung::class],
-    version = 5,
+    version = 8,
     exportSchema = false
 )
 abstract class StudyEnglishDB : RoomDatabase() {
@@ -44,6 +44,53 @@ abstract class StudyEnglishDB : RoomDatabase() {
         val MIGRATION_3_4 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // Since we didn't alter the table, there's nothing else to do here.
+            }
+        }
+
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Perform necessary migrations here
+            }
+        }
+
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Perform necessary migrations here
+            }
+        }
+
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Perform necessary migrations here
+            }
+        }
+
+        val MIGRATION_7_8 = object : Migration(7, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Create the new table
+                database.execSQL(
+                    "CREATE TABLE new_tu_vung (" +
+                            "id INTEGER PRIMARY KEY NOT NULL, " +
+                            "id_bo INTEGER NOT NULL, " +
+                            "dap_an TEXT NOT NULL, " +
+                            "dich_nghia TEXT NOT NULL, " +
+                            "loai_tu TEXT NOT NULL, " +
+                            "audio TEXT NOT NULL, " +
+                            "anh BLOB NULL)"
+                )
+
+                // Copy the data
+                database.execSQL(
+                    "INSERT INTO new_tu_vung (id, id_bo, dap_an, dich_nghia, loai_tu, audio, anh) " +
+                            "SELECT id, id_bo, dap_an, dich_nghia, loai_tu, audio, anh " +
+                            "FROM tu_vung"
+                )
+
+                // Remove the old table
+                database.execSQL("DROP TABLE tu_vung")
+
+                // Change the table name to the correct one
+                database.execSQL("ALTER TABLE new_tu_vung RENAME TO tu_vung")
             }
         }
 
@@ -82,6 +129,13 @@ abstract class StudyEnglishDB : RoomDatabase() {
                     StudyEnglishDB::class.java,
                     DATABASE_NAME
                 )
+                    .addMigrations(
+                        MIGRATION_3_4,
+                        MIGRATION_4_5,
+                        MIGRATION_5_6,
+                        MIGRATION_6_7,
+                        MIGRATION_7_8
+                    )
                     .addCallback(callback)
                     .build()
             }
