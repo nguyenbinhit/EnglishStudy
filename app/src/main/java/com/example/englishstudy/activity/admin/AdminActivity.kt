@@ -33,17 +33,25 @@ class AdminActivity : AppCompatActivity() {
     private lateinit var admins: ListView
     private lateinit var imgLogout: ImageView
     private var doubleBack = false
-    private lateinit var user: User
+    private var user: User? = null
     private lateinit var userViewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin)
-        admins = findViewById(R.id.listviewAdmin)
-        imgLogout = findViewById(R.id.imgLogoutAdmin)
 
         getUser()
 
+        val userExtra = intent.getSerializableExtra("user")
+
+        if (userExtra != null) {
+            user = userExtra as User
+        } else {
+            finish()
+        }
+
+        admins = findViewById(R.id.listviewAdmin)
+        imgLogout = findViewById(R.id.imgLogoutAdmin)
         adminList = ArrayList()
         adminList.add("Thông tin tài khoản")
         adminList.add("Học tập")
@@ -85,7 +93,7 @@ class AdminActivity : AppCompatActivity() {
             }
         }
 
-        if (user.role == 1) {
+        if (user?.role == 1) {
             countDownTimer.start()
         }
 
@@ -125,7 +133,7 @@ class AdminActivity : AppCompatActivity() {
             val email = user.email
             val role = user.role
 
-            this.user = User(idUser.toString(), hoTen, email, point, role)
+            this.user = User(hoTen, email, user.password, point, role).apply { id = idUser}
         })
     }
 }

@@ -74,8 +74,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_admin -> {
-                if (user.role == 0) {
+                if (user.role == 1 && ::user.isInitialized) {
                     val intent = Intent(this@MainActivity, AdminActivity::class.java)
+                    intent.putExtra("user", user)
                     startActivity(intent)
                 } else {
                     messageObject.showDialogMessage(
