@@ -24,7 +24,7 @@ import java.util.concurrent.Executors
 
 @Database(
     entities = [BoHocTap::class, CauDienKhuyet::class, CauLuyenNghe::class, CauSapXep::class, CauTracNghiem::class, User::class, TuVung::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class StudyEnglishDB : RoomDatabase() {
@@ -55,24 +55,24 @@ abstract class StudyEnglishDB : RoomDatabase() {
 
                         Executors.newSingleThreadExecutor().execute {
                             // User
-                            createDataUser()
+                            createDataUser(instance!!)
 
                             // Bo hoc tap
-                            createDataBoHocTap()
+                            createDataBoHocTap(instance!!)
 
                             // Cau dien khuyet
-                            createDataDienKhuyet()
+                            createDataDienKhuyet(instance!!)
 
                             // luyen nghe
 
                             // sap xep
-                            createDataSapXep()
+                            createDataSapXep(instance!!)
 
                             // trac nghiem
-                            createDataTracNghiem()
+                            createDataTracNghiem(instance!!)
 
                             // tu vung
-                            createDataTuVung()
+                            createDataTuVung(instance!!)
                         }
                     }
                 }
@@ -82,7 +82,6 @@ abstract class StudyEnglishDB : RoomDatabase() {
                     StudyEnglishDB::class.java,
                     DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_3_4)
                     .addCallback(callback)
                     .build()
             }
@@ -91,8 +90,8 @@ abstract class StudyEnglishDB : RoomDatabase() {
         }
 
         // create data user
-        private fun createDataUser() {
-            val userDao = instance?.userDao()
+        private fun createDataUser(database: StudyEnglishDB) {
+            val userDao = database.userDao()
             userDao?.deleteAll()
             val user1 = User("admin", "admin@gmail.com", "admin", 0, 1)
             val user2 = User("client", "client@gmail.com", "client", 0, 0)
@@ -100,8 +99,8 @@ abstract class StudyEnglishDB : RoomDatabase() {
         }
 
         // create bo hoc tap
-        private fun createDataBoHocTap() {
-            val boHocTapDao = instance?.boHocTapDao()
+        private fun createDataBoHocTap(database: StudyEnglishDB) {
+            val boHocTapDao = database.boHocTapDao()
             boHocTapDao?.deleteAll()
             val boHocTap1 = BoHocTap(1, "Bộ học tập số 1")
             val boHocTap2 = BoHocTap(2, "Bộ học tập số 2")
@@ -111,8 +110,8 @@ abstract class StudyEnglishDB : RoomDatabase() {
         }
 
         // create data dien khuyet
-        private fun createDataDienKhuyet() {
-            val cauDienKhuyetDao = instance?.cauDienKhuyetDao()
+        private fun createDataDienKhuyet(database: StudyEnglishDB) {
+            val cauDienKhuyetDao = database.cauDienKhuyetDao()
             cauDienKhuyetDao?.deleteAll()
             val cauDienKhuyet1 = CauDienKhuyet(1, "The frog can___", "jump", "eat run can jump")
             val cauDienKhuyet2 = CauDienKhuyet(1, "The duck___swim", "can", "eat run can jump")
@@ -145,8 +144,8 @@ abstract class StudyEnglishDB : RoomDatabase() {
         // create data luyen nghe
 
         // create data sap xep
-        private fun createDataSapXep() {
-            val cauSapXepDao = instance?.cauSapXepDao()
+        private fun createDataSapXep(database: StudyEnglishDB) {
+            val cauSapXepDao = database.cauSapXepDao()
             cauSapXepDao?.deleteAll()
             val cauSapXep1 = CauSapXep(
                 1,
@@ -200,8 +199,8 @@ abstract class StudyEnglishDB : RoomDatabase() {
         }
 
         // create data trac nghiem
-        private fun createDataTracNghiem() {
-            val tracNghiemDAO = instance?.cauTracNghiemDao()
+        private fun createDataTracNghiem(database: StudyEnglishDB) {
+            val tracNghiemDAO = database.cauTracNghiemDao()
             tracNghiemDAO?.deleteAll()
 
             val tracNghiem1 = CauTracNghiem(
@@ -228,8 +227,8 @@ abstract class StudyEnglishDB : RoomDatabase() {
         }
 
         // create data tu vung
-        private fun createDataTuVung() {
-            val tuVungDao = instance?.tuVungDao()
+        private fun createDataTuVung(database: StudyEnglishDB) {
+            val tuVungDao = database.tuVungDao()
             tuVungDao?.deleteAll()
             val tuVung1 = TuVung(
                 1,
