@@ -82,6 +82,7 @@ class LoginActivity : AppCompatActivity() {
                             "currentUserId",
                             user.id
                         )
+                        editor.putInt("currentUserRole", user.role) // Save the user's role
                         // Assuming 'user' is your logged in User object
                         editor.apply()
 

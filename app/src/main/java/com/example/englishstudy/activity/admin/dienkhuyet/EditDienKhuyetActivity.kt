@@ -33,9 +33,9 @@ class EditDienKhuyetActivity : AppCompatActivity() {
 
         val dk = getDienKhuyetByID(idDK)
 
-        edtNoiDung.setText(dk.noidung)
-        edtGoiY.setText(dk.goiy)
-        edtDapAn.setText(dk.dapan)
+        edtNoiDung.setText(dk.noiDung)
+        edtGoiY.setText(dk.goiY)
+        edtDapAn.setText(dk.dapAn)
         imgBack.setOnClickListener {
             val intent = Intent(this@EditDienKhuyetActivity, AdminDienKhuyetActivity::class.java)
             intent.putExtra("idBoDienKhuyet", dk.idBo)
@@ -91,9 +91,9 @@ class EditDienKhuyetActivity : AppCompatActivity() {
         dienKhuyetViewModel.getCauDienKhuyetById(id).observe(this, Observer { dienKhuyet ->
             val idcau = dienKhuyet.id
             val idbo = dienKhuyet.idBo
-            val noidung = dienKhuyet.noidung
-            val dapan = dienKhuyet.dapan
-            val goiy = dienKhuyet.goiy
+            val noidung = dienKhuyet.noiDung
+            val dapan = dienKhuyet.dapAn
+            val goiy = dienKhuyet.goiY
 
             if (noidung != null && goiy != null) {
                 cauDienKhuyet = CauDienKhuyet(idbo, noidung, dapan, goiy).apply {

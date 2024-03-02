@@ -87,7 +87,7 @@ class AddDienKhuyetActivity : AppCompatActivity() {
             goiy
         ).apply {
             this.noiDung = noidung
-            this.dapan = dapan
+            this.dapAn = dapan
             this.goiY = goiy
         }
 

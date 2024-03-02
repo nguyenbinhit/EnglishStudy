@@ -41,14 +41,15 @@ class AdminActivity : AppCompatActivity() {
         setContentView(R.layout.activity_admin)
 
         getUser()
+        val userRole = getUserRole()
 
-        val userExtra = intent.getSerializableExtra("user")
-
-        if (userExtra != null) {
-            user = userExtra as User
-        } else {
-            finish()
-        }
+//        val userExtra = intent.getSerializableExtra("user")
+//
+//        if (userExtra != null) {
+//            user = userExtra as User
+//        } else {
+//            finish()
+//        }
 
         admins = findViewById(R.id.listviewAdmin)
         imgLogout = findViewById(R.id.imgLogoutAdmin)
@@ -78,24 +79,23 @@ class AdminActivity : AppCompatActivity() {
         }
         adapter.notifyDataSetChanged()
 
-        val countDownTimer = object : CountDownTimer(3000, 3000) {
-            override fun onTick(millisUntilFinished: Long) {
-                messageObject.showDialogMessage(
-                    Gravity.CENTER,
-                    this@AdminActivity,
-                    "KHÔNG THỂ TRUY CẬP!!Tài khoản của bạn không phải quản lý!!",
-                    0
-                )
-            }
-
-            override fun onFinish() {
-                startActivity(Intent(this@AdminActivity, MainActivity::class.java))
-            }
-        }
-
-        if (user?.role == 1) {
-            countDownTimer.start()
-        }
+//        if (userRole != 1) {
+//            val countDownTimer = object : CountDownTimer(3000, 3000) {
+//                override fun onTick(millisUntilFinished: Long) {
+//                    messageObject.showDialogMessage(
+//                        Gravity.CENTER,
+//                        this@AdminActivity,
+//                        "KHÔNG THỂ TRUY CẬP!!Tài khoản của bạn không phải quản lý!!",
+//                        0
+//                    )
+//                }
+//
+//                override fun onFinish() {
+//                    startActivity(Intent(this@AdminActivity, MainActivity::class.java))
+//                }
+//            }
+//            countDownTimer.start()
+//        }
 
         imgLogout.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -116,8 +116,13 @@ class AdminActivity : AppCompatActivity() {
     private fun getCurrUserId(): Int {
         // Retrieve the id of the current user from shared preferences
         val sharedPref = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
-
         return sharedPref.getInt("currentUserId", 0);
+    }
+
+    private fun getUserRole(): Int {
+        // Retrieve the role of the current user from shared preferences
+        val sharedPref = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
+        return sharedPref.getInt("currentUserRole", 0)
     }
 
     private fun getUser() {

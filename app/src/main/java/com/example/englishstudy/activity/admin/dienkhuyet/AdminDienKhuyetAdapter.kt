@@ -45,7 +45,7 @@ class AdminDienKhuyetAdapter(
         val imgDelete = view.findViewById<ImageView>(R.id.imgDeleteDK)
         val dk = list[position]
 
-        txtTenDienKhuyet.text = dk.noidung
+        txtTenDienKhuyet.text = dk.noiDung
 
         imgEdit.setOnClickListener {
             val intent = Intent(context, EditDienKhuyetActivity::class.java)

@@ -11,6 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.englishstudy.R
 import com.example.englishstudy.activity.dienkhuyet.DienKhuyetActivity
+import com.example.englishstudy.activity.hoctuvung.HocTuVungActivity
+import com.example.englishstudy.activity.luyennghe.LuyenNgheActivity
+import com.example.englishstudy.activity.sapxepcau.SapXepCauActivity
+import com.example.englishstudy.activity.taikhoan.RankingActivity
+import com.example.englishstudy.activity.tracnghiem.TracNghiemActivity
 
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
@@ -41,34 +46,34 @@ class HomeFragment : Fragment() {
     }
 
     private fun setCardViewListeners() {
-//        cardViewHocTuVung.setOnClickListener {
-//            val intent = Intent(activity, HocTuVungActivity::class.java)
-//            startActivity(intent)
-//        }
+        cardViewHocTuVung.setOnClickListener {
+            val intent = Intent(activity, HocTuVungActivity::class.java)
+            startActivity(intent)
+        }
 
         cardViewDienKhuyet.setOnClickListener {
             val intent = Intent(activity, DienKhuyetActivity::class.java)
             startActivity(intent)
         }
 
-//        cardViewTracNghiem.setOnClickListener {
-//            val intent = Intent(activity, TracNghiemActivity::class.java)
-//            startActivity(intent)
-//        }
-//
-//        cardViewSapXepCau.setOnClickListener {
-//            val intent = Intent(activity, SapXepCauActivity::class.java)
-//            startActivity(intent)
-//        }
-//
-//        cardViewLuyenNghe.setOnClickListener {
-//            val intent = Intent(activity, LuyenNgheActivity::class.java)
-//            startActivity(intent)
-//        }
-//
-//        cardViewXepHang.setOnClickListener {
-//            val intent = Intent(activity, RankingActivity::class.java)
-//            startActivity(intent)
-//        }
+        cardViewTracNghiem.setOnClickListener {
+            val intent = Intent(activity, TracNghiemActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardViewSapXepCau.setOnClickListener {
+            val intent = Intent(activity, SapXepCauActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardViewLuyenNghe.setOnClickListener {
+            val intent = Intent(activity, LuyenNgheActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardViewXepHang.setOnClickListener {
+            val intent = Intent(activity, RankingActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

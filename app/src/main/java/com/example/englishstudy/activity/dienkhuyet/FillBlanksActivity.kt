@@ -143,9 +143,9 @@ class FillBlanksActivity : AppCompatActivity() {
                         intent.putExtra("qcountDK", pos)
                         startActivity(intent)
                     } else {
-                        answer = it.dapan
-                        txtGoiy.text = it.goiy
-                        txtquestionDK.text = it.noidung
+                        answer = it.dapAn.toString()
+                        txtGoiy.text = it.goiY
+                        txtquestionDK.text = it.noiDung
                     }
                 }
             })

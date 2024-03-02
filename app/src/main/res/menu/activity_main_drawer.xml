@@ -8,10 +8,10 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_main"
             android:title="Trang Chủ" />
-        <item
-            android:id="@+id/nav_admin"
-            android:icon="@drawable/rankcustomer"
-            android:title="Quản lý" />
+<!--        <item-->
+<!--            android:id="@+id/nav_admin"-->
+<!--            android:icon="@drawable/rankcustomer"-->
+<!--            android:title="Quản lý" />-->
     </group>
 
     <item android:title="Học Tập">

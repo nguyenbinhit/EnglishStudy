@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
@@ -73,8 +74,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_admin -> {
-                if (user.role == 1 && ::user.isInitialized) {
+            R.id.action_admin, R.id.nav_admin -> {
+                if (user.id == 1 && ::user.isInitialized) {
                     val intent = Intent(this@MainActivity, AdminActivity::class.java)
                     intent.putExtra("user", user)
                     startActivity(intent)
@@ -115,6 +116,12 @@ class MainActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
 
         return sharedPref.getInt("currentUserId", 0);
+    }
+
+    private fun getUserRole(): Int {
+        // Retrieve the role of the current user from shared preferences
+        val sharedPref = getSharedPreferences("MyPref", Context.MODE_PRIVATE)
+        return sharedPref.getInt("currentUserRole", 0)
     }
 
     private fun getUser() {
