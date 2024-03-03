@@ -34,7 +34,6 @@ class EditTuVungActivity : AppCompatActivity() {
     private lateinit var edtNghia: EditText
     private lateinit var edtAudio: EditText
     private lateinit var spnTuLoai: Spinner
-    private var listTuVung: ArrayList<TuVung> = ArrayList()
     private lateinit var tuVungViewModel: TuVungViewMModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +53,7 @@ class EditTuVungActivity : AppCompatActivity() {
             ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, listTuLoai)
         spnTuLoai.adapter = tuLoaiAdapter
 
+        tuVungViewModel = ViewModelProvider(this).get(TuVungViewMModel::class.java)
         val idTV = intent.getIntExtra("ID_TV", -1)
         lifecycleScope.launch (Dispatchers.IO) {
             val tuVung = tuVungViewModel.getListTuVungById(idTV)
