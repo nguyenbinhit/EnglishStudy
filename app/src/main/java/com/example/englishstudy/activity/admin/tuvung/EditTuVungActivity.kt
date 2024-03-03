@@ -87,8 +87,12 @@ class EditTuVungActivity : AppCompatActivity() {
                         Toast.makeText(this@EditTuVungActivity, "Chưa điền đầy thông tin", Toast.LENGTH_SHORT).show()
                     } else {
                         val result =
-                            updateTuVung(tuVung.id, tuVung.idBo, dapan, nghia, loaitu, audio, anh)
-                        if (result) {
+                            anh?.let { it1 ->
+                                updateTuVung(tuVung.id, tuVung.idBo, dapan, nghia, loaitu, audio,
+                                    it1
+                                )
+                            }
+                        if (result == true) {
                             Toast.makeText(this@EditTuVungActivity, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this@EditTuVungActivity, AdminTuVungActivity::class.java)
                             intent.putExtra("idBoTuVung", tuVung.idBo)
@@ -133,12 +137,16 @@ class EditTuVungActivity : AppCompatActivity() {
         }
     }
 
-    private fun getByteArrayFromImageView(img: ImageView): ByteArray {
-        val drawable = img.drawable as BitmapDrawable
-        val bmp = drawable.bitmap
-        val stream = ByteArrayOutputStream()
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        return stream.toByteArray()
+    private fun getByteArrayFromImageView(img: ImageView): ByteArray? {
+        val drawable = img.drawable
+        if (drawable != null) {
+            val bitmapDrawable = drawable as BitmapDrawable
+            val bmp = bitmapDrawable.bitmap
+            val stream = ByteArrayOutputStream()
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            return stream.toByteArray()
+        }
+        return null
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent?) {
