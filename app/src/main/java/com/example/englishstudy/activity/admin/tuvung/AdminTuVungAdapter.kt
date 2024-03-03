@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.example.englishstudy.R
 import com.example.englishstudy.model.entity.TuVung
 import com.example.englishstudy.viewmodel.TuVungViewMModel
@@ -76,7 +77,7 @@ class AdminTuVungAdapter(
     }
 
     private fun deleteTuVung(tuVung: TuVung): Boolean {
-        tuVungViewMModel = ViewModelProvider(context as Activity).get(TuVungViewMModel::class.java)
+        tuVungViewMModel = ViewModelProvider(this.context as ViewModelStoreOwner).get(TuVungViewMModel::class.java)
 
         return try {
             tuVungViewMModel.deleteTuVung(tuVung)
@@ -89,7 +90,7 @@ class AdminTuVungAdapter(
     private fun getTuVung(id: Int): ArrayList<TuVung> {
         val listTV = ArrayList<TuVung>()
 
-        tuVungViewMModel = ViewModelProvider(context as Activity).get(TuVungViewMModel::class.java)
+        tuVungViewMModel = ViewModelProvider(context as ViewModelStoreOwner).get(TuVungViewMModel::class.java)
 
         tuVungViewMModel.getListTuVungByIdBo(id).observe(lifecycleOwner, Observer {
             listTV.clear()
@@ -100,7 +101,4 @@ class AdminTuVungAdapter(
         return listTV
     }
 
-    private fun ViewModelProvider(owner: Activity): ViewModelProvider {
-        return ViewModelProvider(owner)
-    }
 }

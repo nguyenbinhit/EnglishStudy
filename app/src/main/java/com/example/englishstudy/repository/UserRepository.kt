@@ -58,8 +58,10 @@ class UserRepository(val context: Context) {
     }
 
     // update point user
-    public fun updatePointUser(id: Int, point: Int) {
-        userDao.updatePointUser(id, point)
+    public suspend fun updatePointUser(id: Int, point: Int) {
+        withContext(Dispatchers.IO) {
+            userDao.updatePointUser(id, point)
+        }
     }
 
     // list user rank

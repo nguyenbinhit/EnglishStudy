@@ -52,7 +52,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // update point user
-    public fun updatePointUser(id: Int, point: Int) {
+    public fun updatePointUser(id: Int, point: Int) = viewModelScope.launch {
         userRepository.updatePointUser(id, point)
     }
 

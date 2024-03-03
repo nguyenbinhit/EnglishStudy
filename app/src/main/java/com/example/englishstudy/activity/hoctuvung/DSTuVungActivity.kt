@@ -35,16 +35,16 @@ class DSTuVungActivity : AppCompatActivity() {
 
         addArrayTV()
 
-        if (DStuvung.size <= 0) {
-            Toast.makeText(
-                this,
-                "Nội dung sẽ cập nhật cập nhật trong thời gian sớm nhất! Mong mọi người thông càm!!",
-                Toast.LENGTH_LONG
-            ).show()
-            val error = Intent(this, HocTuVungActivity::class.java)
-            finish()
-            startActivity(error)
-        } else {
+//        if (DStuvung.size <= 0) {
+//            Toast.makeText(
+//                this,
+//                "Nội dung sẽ cập nhật cập nhật trong thời gian sớm nhất! Mong mọi người thông càm!!",
+//                Toast.LENGTH_LONG
+//            ).show()
+//            val error = Intent(this, HocTuVungActivity::class.java)
+//            finish()
+//            startActivity(error)
+//        } else {
             adapter = DSTuVungAdapter(this, R.layout.row_dstuvung, DStuvung)
             dstuvungs.adapter = adapter
             adapter.notifyDataSetChanged()
@@ -59,7 +59,7 @@ class DSTuVungActivity : AppCompatActivity() {
                 ontap.putExtra("idbo", idbo)
                 startActivity(ontap)
             }
-        }
+//        }
     }
 
     private fun addArrayTV() {

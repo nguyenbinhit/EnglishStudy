@@ -5,9 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
+import android.media.AudioManager
 import android.media.MediaPlayer
+import android.os.Bundle
 import android.view.Gravity
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -19,8 +22,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.englishstudy.R
+import com.example.englishstudy.activity.luyennghe.MediaPlayerUtils
 import com.example.englishstudy.model.entity.TuVung
 import com.example.englishstudy.model.entity.User
+import com.example.englishstudy.viewmodel.TuVungViewMModel
 import com.example.englishstudy.viewmodel.UserViewModel
 import java.util.Random
 
@@ -50,6 +55,82 @@ class WordMattersActivity : AppCompatActivity() {
     private lateinit var smalltobig: Animation
     private lateinit var userViewModel: UserViewModel
     private lateinit var user: User
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_word_matters)
+        smalltobig = AnimationUtils.loadAnimation(this, R.anim.smalltobig)
+
+        anhXa()
+        getUser()
+
+        val intent = intent
+        idbo = intent.getIntExtra("idbo",0)
+        DStuvung = ArrayList()
+
+        mediaPlayer = MediaPlayer()
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        mediaPlayer.setOnPreparedListener { mp -> mp.start() }
+
+        val tuVungViewModel = ViewModelProvider(this).get(TuVungViewMModel::class.java)
+        tuVungViewModel.getListTuVungByIdBo(idbo).observe(this, Observer { tuVungs ->
+            DStuvung.clear()
+            DStuvung.addAll(tuVungs)
+
+            // Move the dependent code into the observer block
+            if (DStuvung.isNotEmpty()) {
+                val img = DStuvung[0].anh?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
+                imgview.setImageBitmap(img)
+                imgview.startAnimation(smalltobig)
+                textQuestion.text = "(${DStuvung[0].loaiTu}) - (${DStuvung[0].dichNghia})"
+                tvWordCount.text = "Word: $tu/${DStuvung.size}"
+                tvScore.text = "Score: $score"
+
+                textAnswer = DStuvung[0].dapAn
+                URL = DStuvung[0].audio
+
+                smallbigforth = AnimationUtils.loadAnimation(this, R.anim.smallbigforth)
+
+                for (i in textAnswer.indices) {
+                    keys[i] = textAnswer[i].toString()
+                }
+
+                dem = 0
+                while (dem < keys.size) {
+                    when {
+                        dem < 4 -> {
+                            addView(findViewById(R.id.layoutParent1), keys[dem], findViewById(R.id.editText))
+                        }
+                        dem < 8 -> {
+                            addView(findViewById(R.id.layoutParent2), keys[dem], findViewById(R.id.editText))
+                        }
+                        else -> {
+                            addView(findViewById(R.id.layoutParent3), keys[dem], findViewById(R.id.editText))
+                        }
+                    }
+                    dem++
+                }
+
+                maxPresCounter = textAnswer.length
+
+                ListenTV.setOnClickListener {
+                    doStop()
+                    if (UL == URL) MediaPlayerUtils.playURLMedia(this, mediaPlayer, UL)
+                    else {
+                        val mediaURL = URL
+                        UL = URL
+                        MediaPlayerUtils.playURLMedia(this, mediaPlayer, mediaURL)
+                    }
+                }
+
+                btnquit.setOnClickListener {
+                    finish()
+                    val intent = Intent(this, HocTuVungActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        })
+    }
 
     private fun anhXa() {
         textQuestion = findViewById(R.id.textQuestion)
@@ -119,7 +200,7 @@ class WordMattersActivity : AppCompatActivity() {
         textView.isFocusable = true
         textView.textSize = 35f
 
-        val typeface = Typeface.createFromAsset(assets, "fonts/FredokaOneRegular.ttf")
+        val typeface = Typeface.createFromAsset(assets, "fonts/fredokaoneregular.ttf")
 
         textScreen.typeface = typeface
         textTitle.typeface = typeface
