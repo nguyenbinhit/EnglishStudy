@@ -13,18 +13,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.englishstudy.R
 import com.example.englishstudy.model.entity.BoHocTap
-import com.example.englishstudy.viewmodel.BoHocTapViewModel
+
+interface OnBoHocTapDeleteListener {
+    fun onDeleteBoHocTap(boHocTap: BoHocTap)
+}
 
 class AdminBoHocTapAdapter(
     private val context: Context,
     private val lifecycleOwner: LifecycleOwner,
-    private val list: ArrayList<BoHocTap>
+    private val list: ArrayList<BoHocTap>,
+    private val deleteListener: OnBoHocTapDeleteListener
 ) :
     BaseAdapter() {
-    private lateinit var boHocTapViewModel: BoHocTapViewModel
 
     override fun getCount(): Int {
         return list.size
@@ -58,15 +60,7 @@ class AdminBoHocTapAdapter(
             builder.setTitle("Xác nhận xóa")
             builder.setMessage("Bạn chắc chắn muốn xóa bộ học tập này?")
             builder.setPositiveButton("Có") { dialog, which ->
-                val result = deleteBoHocTap(bht)
-
-                if (result) {
-                    Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "Xóa thất bại", Toast.LENGTH_SHORT).show()
-                }
-
-                getBoHocTap()
+                deleteListener.onDeleteBoHocTap(bht)
             }
             builder.setNegativeButton("Không") { dialog, which ->
 
@@ -75,32 +69,5 @@ class AdminBoHocTapAdapter(
             dialog.show()
         }
         return view
-    }
-
-    private fun deleteBoHocTap(boHocTap: BoHocTap): Boolean {
-        boHocTapViewModel =
-            ViewModelProvider(lifecycleOwner).get(BoHocTapViewModel::class.java)
-
-        return try {
-            boHocTapViewModel.deleteBoHocTap(boHocTap)
-            true
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    private fun ViewModelProvider(owner: LifecycleOwner): ViewModelProvider {
-        return ViewModelProvider(owner)
-    }
-
-    private fun getBoHocTap() {
-        boHocTapViewModel =
-            ViewModelProvider(lifecycleOwner).get(BoHocTapViewModel::class.java)
-
-        boHocTapViewModel.getListBoHocTap().observe(lifecycleOwner, Observer { boHocTaps ->
-            list.clear()
-            list.addAll(boHocTaps)
-            notifyDataSetChanged()
-        })
     }
 }

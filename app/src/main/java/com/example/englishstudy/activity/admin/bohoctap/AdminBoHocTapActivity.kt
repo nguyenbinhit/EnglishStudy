@@ -12,8 +12,8 @@ import com.example.englishstudy.activity.admin.AdminActivity
 import com.example.englishstudy.model.entity.BoHocTap
 import com.example.englishstudy.viewmodel.BoHocTapViewModel
 
-class AdminBoHocTapActivity : AppCompatActivity() {
-    private lateinit var listBHT: ArrayList<BoHocTap>
+class AdminBoHocTapActivity : AppCompatActivity(), OnBoHocTapDeleteListener {
+    private lateinit var listBHT: MutableList<BoHocTap> // Change List to MutableList
     private lateinit var adapter: AdminBoHocTapAdapter
     private lateinit var imgBack: ImageView
     private lateinit var imgAdd: ImageView
@@ -23,13 +23,16 @@ class AdminBoHocTapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_bohoctap)
+
+        listBHT = ArrayList<BoHocTap>()
+
         listViewBHT = findViewById(R.id.listviewAdminBHT)
         imgBack = findViewById(R.id.imgBackAdminBHT)
         imgAdd = findViewById(R.id.imgAddBHT)
 
         getBoHocTap()
 
-        adapter = AdminBoHocTapAdapter(this, this, listBHT)
+        adapter = AdminBoHocTapAdapter(this, this, listBHT as ArrayList<BoHocTap>, this)
         listViewBHT.adapter = adapter
         adapter.notifyDataSetChanged()
 
@@ -49,5 +52,9 @@ class AdminBoHocTapActivity : AppCompatActivity() {
             listBHT.addAll(boHocTaps)
             adapter.notifyDataSetChanged()
         })
+    }
+
+    override fun onDeleteBoHocTap(boHocTap: BoHocTap) {
+        boHocTapViewModel.deleteBoHocTap(boHocTap)
     }
 }

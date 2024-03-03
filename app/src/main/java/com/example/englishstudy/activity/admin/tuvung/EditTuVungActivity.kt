@@ -14,9 +14,13 @@ import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.englishstudy.R
 import com.example.englishstudy.model.entity.TuVung
 import com.example.englishstudy.viewmodel.TuVungViewMModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.InputStream
@@ -31,7 +35,7 @@ class EditTuVungActivity : AppCompatActivity() {
     private lateinit var edtAudio: EditText
     private lateinit var spnTuLoai: Spinner
     private var listTuVung: ArrayList<TuVung> = ArrayList()
-    private lateinit var tuVungViewMModel: TuVungViewMModel
+    private lateinit var tuVungViewModel: TuVungViewMModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,60 +55,55 @@ class EditTuVungActivity : AppCompatActivity() {
         spnTuLoai.adapter = tuLoaiAdapter
 
         val idTV = intent.getIntExtra("ID_TV", -1)
-        val tuVung = getTuVungByID(idTV)
-        edtTuVung.setText(tuVung.dapAn)
-        edtNghia.setText(tuVung.dichNghia)
-        edtAudio.setText(tuVung.audio)
-        when (tuVung.loaiTu) {
-            "Danh từ" -> spnTuLoai.setSelection(0)
-            "Động từ" -> spnTuLoai.setSelection(1)
-            "Tính từ" -> spnTuLoai.setSelection(2)
-            "Trạng từ" -> spnTuLoai.setSelection(3)
-            "Giới từ" -> spnTuLoai.setSelection(4)
-        }
-        val bmp = tuVung.anh?.let { BitmapFactory.decodeByteArray(tuVung.anh, 0, it.size) }
-        imgHinh.setImageBitmap(bmp)
-        imgBack.setOnClickListener {
-            val intent = Intent(this, AdminTuVungActivity::class.java)
-            intent.putExtra("idBoTuVung", tuVung.idBo)
-            startActivity(intent)
-        }
-        imgEdit.setOnClickListener {
-            val dapan = edtTuVung.text.toString()
-            val nghia = edtNghia.text.toString()
-            val audio = edtAudio.text.toString()
-            val loaitu = spnTuLoai.selectedItem.toString()
-            val anh = getByteArrayFromImageView(imgHinh)
-            if (dapan == "" || nghia == "" || audio == "" || loaitu == "") {
-                Toast.makeText(this, "Chưa điền đầy thông tin", Toast.LENGTH_SHORT).show()
-            } else {
-                val result =
-                    updateTuVung(tuVung.id, tuVung.idBo, dapan, nghia, loaitu, audio, anh)
-                if (result) {
-                    Toast.makeText(this, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, AdminTuVungActivity::class.java)
+        lifecycleScope.launch (Dispatchers.IO) {
+            val tuVung = tuVungViewModel.getListTuVungById(idTV)
+            withContext(Dispatchers.Main) {
+                // Update your UI with the tuVung data here
+                edtTuVung.setText(tuVung.dapAn)
+                edtNghia.setText(tuVung.dichNghia)
+                edtAudio.setText(tuVung.audio)
+                when (tuVung.loaiTu) {
+                    "Danh từ" -> spnTuLoai.setSelection(0)
+                    "Động từ" -> spnTuLoai.setSelection(1)
+                    "Tính từ" -> spnTuLoai.setSelection(2)
+                    "Trạng từ" -> spnTuLoai.setSelection(3)
+                    "Giới từ" -> spnTuLoai.setSelection(4)
+                }
+                val bmp = tuVung.anh?.let { BitmapFactory.decodeByteArray(tuVung.anh, 0, it.size) }
+                imgHinh.setImageBitmap(bmp)
+
+                imgBack.setOnClickListener {
+                    val intent = Intent(this@EditTuVungActivity, AdminTuVungActivity::class.java)
                     intent.putExtra("idBoTuVung", tuVung.idBo)
                     startActivity(intent)
-                } else {
-                    Toast.makeText(this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show()
+                }
+                imgEdit.setOnClickListener {
+                    val dapan = edtTuVung.text.toString()
+                    val nghia = edtNghia.text.toString()
+                    val audio = edtAudio.text.toString()
+                    val loaitu = spnTuLoai.selectedItem.toString()
+                    val anh = getByteArrayFromImageView(imgHinh)
+                    if (dapan == "" || nghia == "" || audio == "" || loaitu == "") {
+                        Toast.makeText(this@EditTuVungActivity, "Chưa điền đầy thông tin", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val result =
+                            updateTuVung(tuVung.id, tuVung.idBo, dapan, nghia, loaitu, audio, anh)
+                        if (result) {
+                            Toast.makeText(this@EditTuVungActivity, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@EditTuVungActivity, AdminTuVungActivity::class.java)
+                            intent.putExtra("idBoTuVung", tuVung.idBo)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(this@EditTuVungActivity, "Cập nhật thất bại", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }
+
         btnChonHinh.setOnClickListener {
             choosePhoto()
         }
-    }
-
-    private fun getTuVungByID(id: Int): TuVung {
-        listTuVung.clear()
-
-        tuVungViewMModel = ViewModelProvider(this).get(TuVungViewMModel::class.java)
-
-        val tuVung = tuVungViewMModel.getListTuVungById(id)
-
-        listTuVung.add(tuVung)
-
-        return listTuVung[0]
     }
 
     private fun choosePhoto() {
@@ -122,12 +121,12 @@ class EditTuVungActivity : AppCompatActivity() {
         audio: String,
         anh: ByteArray
     ): Boolean {
-        tuVungViewMModel = ViewModelProvider(this).get(TuVungViewMModel::class.java)
+        tuVungViewModel = ViewModelProvider(this).get(TuVungViewMModel::class.java)
 
         val tuVung = TuVung(idbo, dapan, nghia, loaitu, audio, anh).apply { id = idtu }
 
         try {
-            tuVungViewMModel.updateTuVung(tuVung)
+            tuVungViewModel.updateTuVung(tuVung)
             return true
         } catch (e: Exception) {
             return false

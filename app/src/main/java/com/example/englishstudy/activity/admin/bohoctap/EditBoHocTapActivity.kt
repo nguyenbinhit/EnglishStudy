@@ -7,15 +7,18 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.englishstudy.R
 import com.example.englishstudy.model.entity.BoHocTap
 import com.example.englishstudy.viewmodel.BoHocTapViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EditBoHocTapActivity : AppCompatActivity() {
     private lateinit var imgBack: ImageView
     private lateinit var imgEdit: ImageView
     private lateinit var edtBoHocTap: EditText
-    private var listBHT: ArrayList<BoHocTap> = ArrayList()
     private lateinit var boHocTapViewModel: BoHocTapViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,56 +30,64 @@ class EditBoHocTapActivity : AppCompatActivity() {
         edtBoHocTap = findViewById(R.id.edtEditBoHocTap)
 
         val idBHT = intent.getIntExtra("ID_BHT", -1)
-        val boHocTap = getBoHocTapByID(idBHT)
 
-        edtBoHocTap.setText(boHocTap.tenBo + "")
+        lifecycleScope.launch {
+            val boHocTap = getBoHocTapByID(idBHT)
 
-        imgBack.setOnClickListener {
-            startActivity(Intent(this@EditBoHocTapActivity, AdminBoHocTapActivity::class.java))
-        }
+            edtBoHocTap.setText(boHocTap.tenBo + "")
 
-        imgEdit.setOnClickListener {
-            val ten = edtBoHocTap.text.toString()
-            if (ten == "") {
-                Toast.makeText(
-                    this@EditBoHocTapActivity,
-                    "Chưa điền đầy đủ thông tin",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                val result = updateBoHocTap(boHocTap.id, boHocTap.stt, ten)
-                if (result) {
+            imgBack.setOnClickListener {
+                startActivity(Intent(this@EditBoHocTapActivity, AdminBoHocTapActivity::class.java))
+            }
+
+            imgEdit.setOnClickListener {
+                val ten = edtBoHocTap.text.toString()
+                if (ten == "") {
                     Toast.makeText(
                         this@EditBoHocTapActivity,
-                        "Cập nhật thành công",
+                        "Chưa điền đầy đủ thông tin",
                         Toast.LENGTH_SHORT
                     ).show()
-                    startActivity(
-                        Intent(
-                            this@EditBoHocTapActivity,
-                            AdminBoHocTapActivity::class.java
-                        )
-                    )
                 } else {
-                    Toast.makeText(
-                        this@EditBoHocTapActivity,
-                        "Cập nhật thất bại",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    lifecycleScope.launch {
+                        val result = updateBoHocTap(boHocTap.id, boHocTap.stt, ten)
+                        if (result) {
+                            Toast.makeText(
+                                this@EditBoHocTapActivity,
+                                "Cập nhật thành công",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            startActivity(
+                                Intent(
+                                    this@EditBoHocTapActivity,
+                                    AdminBoHocTapActivity::class.java
+                                )
+                            )
+                        } else {
+                            Toast.makeText(
+                                this@EditBoHocTapActivity,
+                                "Cập nhật thất bại",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun updateBoHocTap(id: Int, stt: Int, ten: String): Boolean {
-        boHocTapViewModel = ViewModelProvider(this).get(BoHocTapViewModel::class.java)
-        boHocTapViewModel.updateBoHocTap(id, stt, ten)
-        return true
+    private suspend fun updateBoHocTap(id: Int, stt: Int, ten: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            boHocTapViewModel = ViewModelProvider(this@EditBoHocTapActivity).get(BoHocTapViewModel::class.java)
+            boHocTapViewModel.updateBoHocTap(id, stt, ten)
+            true
+        }
     }
 
-    private fun getBoHocTapByID(id: Int): BoHocTap {
-        boHocTapViewModel = ViewModelProvider(this).get(BoHocTapViewModel::class.java)
-        val boHocTap = boHocTapViewModel.getBoHocTapDetail(id)
-        return boHocTap
+    private suspend fun getBoHocTapByID(id: Int): BoHocTap {
+        return withContext(Dispatchers.IO) {
+            boHocTapViewModel = ViewModelProvider(this@EditBoHocTapActivity).get(BoHocTapViewModel::class.java)
+            boHocTapViewModel.getBoHocTapDetail(id)
+        }
     }
 }
